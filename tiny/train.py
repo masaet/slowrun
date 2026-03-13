@@ -752,6 +752,7 @@ with torch.device("meta"):
     model = GPT(config)
 model.to_empty(device=device)
 model.init_weights()
+model.to(torch.bfloat16) 
 
 param_counts = sum(p.numel() for p in model.parameters())
 transformer_params = sum(p.numel() for p in model.transformer.h.parameters())
