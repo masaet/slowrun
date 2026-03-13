@@ -414,7 +414,13 @@ polar_express_coeffs = [
 
 @torch.compile(dynamic=False, fullgraph=True)
 def adamw_step_fused(p, grad, exp_avg, exp_avg_sq, step_t, lr_t, beta1_t, beta2_t, eps_t, wd_t):
-    grad = grad.to(exp_avg.dtype)
+    dtype = exp_avg.dtype
+    grad = grad.to(dtype)
+    beta1_t = beta1_t.to(dtype)
+    beta2_t = beta2_t.to(dtype)
+    lr_t = lr_t.to(dtype)
+    eps_t = eps_t.to(dtype)
+    wd_t = wd_t.to(dtype)
     p.mul_(1 - lr_t * wd_t)
     exp_avg.lerp_(grad, 1 - beta1_t)
     exp_avg_sq.lerp_(grad.square(), 1 - beta2_t)
